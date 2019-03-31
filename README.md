@@ -1,2 +1,12 @@
-# NCRE
-NCRE-C,NCRE-Java,NCRE-MySQL,NCRE-database technology
+## NCRE ( National Computer Rank Examination )
+
+### 该仓库包含的内容如下：
+- `全国计算机等考三级数据库技术学习笔记`
+- `全国计算机二级C语言学习笔记及试卷`
+
+### 至于下述等考的学习笔记及题目解析详情见我的网站呦：https://yubuntu0109.github.io/
+- `全国计算机二级Java学习笔记及试卷`
+- `全国计算机二级MySQL学习建议`
+
+### 如果遇到什么问题,可以联系我哟! 很荣幸解答的(っ•̀ω•́)っ✎⁾⁾ 
+- qq ： `3083968068`
