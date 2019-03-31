@@ -49,10 +49,10 @@ NODE *creatlink(int n, int m)
     int i;
     h = p = (NODE *)malloc(sizeof(NODE));
     h->data = 9999;
-    for (i = 1; i <= n; i++) 
+    for (i = 1; i <= n; i++)
     {
         s = (NODE *)malloc(sizeof(NODE));
-        s->data = rand() % m; 
+        s->data = rand() % m;
         s->next = p->next;
         p->next = s;
         p = p->next;
