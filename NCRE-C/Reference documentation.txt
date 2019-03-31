@@ -1,0 +1,8 @@
+--- The parameter of GCC --- 
+http://www.runoob.com/w3cnote/gcc-parameter-detail.html
+
+--- ERROR : undefined reference to 'xxx' ---
+https://segmentfault.com/a/1190000006049907?utm_source=tag-newest
+
+--- ERROR : exponent has no digits ---
+http://www.itkeyword.com/doc/8470400809990960x562/why-is-this-c-or-c-macro-not-expanded-by-the-preprocessor

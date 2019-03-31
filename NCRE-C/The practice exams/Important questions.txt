@@ -1,0 +1,17 @@
+Important questions be shown as followed: 
+    Examination paper 06: examintion-questions-3.c
+    Examination paper 07: examintion-questions-3.c
+    Examination paper 08: examintion-questions-3.c
+    Examination paper 09: examintion-questions-1/2.c
+    Examination paper 17: examintion-questions-2.c
+    Examination paper 18: examintion-questions-3.c
+    Examination paper 19: examintion-questions-3.c
+    Examination paper 20: examintion-questions-3.c
+    Examination paper 22: examintion-questions-3.c
+    Examination paper 25: examintion-questions-3.c
+    Examination paper 26: examintion-questions-3.c
+    Examination paper 29: examintion-questions-3.c
+
+
+Data structures and algorithm anysis in C.
+    Examination paper 12: examintion-questions-1/2.c
