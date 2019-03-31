@@ -1,0 +1,58 @@
+/*
+ * @Author: HuangYuhui 
+ * @Date: 2019-02-02 10:49:41 
+ * @Last Modified by: HuangYuhui
+ * @Last Modified time: 2019-02-02 11:23:58
+ */
+
+设计与应用题
+1-设某连锁商店数据库中有关系模式R:
+R(商店编号,商品编号,库存数量,部门编号,负责人)
+如果规定 : 每个商店的每种商品只在一个部门销售,每个商店的每个部门只有一个负责人,每个商店的每种商品只有一个库存数量.
+(1)请根据上述规定,写出关系模式R的函数依赖项集;
+(2)请给出关系模式R的候选码;
+(3)请给出关系模式R属于第几范式,并给出理由;
+(4)请将R分解成满足3NF的关系模式.
+
+
+2-设在SQL Server 2008某数据库中,已建立了四个文件组:'fg1,fg2,fg3,fg4',以及一个分区函数RangePF1,RangePFI的定义代码如下 : 
+CREATE PARTITION FUNCTION 请基于RangePF1(int)
+AS RANGE LEET FOR VALUES(100,200,300)
+(1)-请基于RangePF1创建一个分区方案RangePS1,每个分区对应一个文件组.
+(2)-请使用RangePS1创建一个分区表PartitionT(Gid,GoodName,Price),该表基于Gid列创建分区.其中Git:int类型,取值大于等于1;
+    GoodName:统一字符编码可变长类型.最多存储20个汉字,Price:定点小数类型,小数部分1位,整数部分到千位.
+
+
+3-某商场商品经营管理系统使用SQL Server 2008数据库管理系统,此系统上线运行1年后,业务人员使用某系统功能(此功能每月使用一次)
+时很慢.该统计功能主要执行的SQL语句如下 : 
+
+SELECT 商品号,SUM(销售数量*销售价格) 销售额
+    FROM 销售明细
+        GROUP BY 商品号;
+
+该销售明细表的建表语句如下 : 
+CREATE TABLE 销售明细
+(
+    序列号 int IDENTITY(1,1) NOT NULL,
+    商品号 int NOT NULL,
+    销售日期 datetime NULL,
+    销售数量 int NOT NULL,
+    销售价格 int NOT NULL
+);
+并在销售明细表上建立如下索引 : 
+CREATE index_ix_销售明细_商品号 ON 销售明细(商品号);
+
+某技术人员提出通过执行下述语句可以提高此查询的运行效率;
+CREATE VIEW 商品销售额视图
+    WITH SCHEMABINDING
+        AS
+            SELECT 商品号,SUM(销售数量 * 销售价格)销售额, COUNT_BIG(*) cnt FROM dbo.销售明细 GROUP BY 商品号;
+CREATE UNIQUE CLUSTERED INDEX ix_商品销售额 ON 商品销售额视图(商品号);
+
+问题:
+    (1)-请分析该技术人员给出的语句功能以及对原有查询语句的性能影响,并给出原因.
+    (2)-此商场的销售量很大,每天有大量的数据插入到销售明细表中,请从数据库整体性能角度分析,此技术人员提出的优化方法是否合适,并给出原因.
+
+    '--- 解题思路 ---'
+
+    '--- 参考答案 ---'

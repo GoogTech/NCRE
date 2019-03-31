@@ -1,0 +1,148 @@
+/*
+ * @Author: HuangYuhui 
+ * @Date: 2019-02-04 08:59:31 
+ * @Last Modified by: HuangYuhui
+ * @Last Modified time: 2019-02-06 16:43:01
+ */
+
+设计与应用题
+1-已知有如下关系模式: R1('a',b,c), R2('c',d,a), R3('e',f), R4('a','e',g), 其中标有''的属性是主码,请将上述关系模式用
+适当的ER图表示出来,并用下划线标出作为实体主码的属性.
+
+    '--- 解题思路 ---'
+    ER模型和关系模型相互转换的一般规则如下 : 
+    (1)-将每一个实体类型转换成一个关系模式,实体的为属性关系模式的属性.
+    (2)-对于二元联系,按各种情况处理.详情见 : P321
+
+    此题为关系模式转换为实体类型,因此采用 : '实体 ——> 关系的逆向思维解题'.
+    从模式R1和R2可知,R1和R2为 : '一对一关系'.根据这两个模式的拆分可以确定三个实体.此处将这三个实体分别命名为 : A,B,C
+    其中A,B和C分别一一对应,且a和c分别是B和C的外键.从模式R1和R4可知,R1和R4 : '多对一关系'.由此确定实体D.从模式R3
+    和R4可知,R3和R4为 : '多对一关系'.由此可以确定实体E.
+
+    '--- 参考答案 ---'
+    详情见 : question-0401.png
+
+
+
+
+/*
+ * @Author: HuangYuhui 
+ * @Date: 2019-02-04 09:56:04 
+ * @Last Modified by:   HuangYuhui 
+ * @Last Modified time: 2019-02-04 09:56:04 
+ */
+
+2-设在SQL Server 2008某数据库中有商品表和销售表,两个表的定义如下 : 
+CREATE TABLE 商品表
+(
+    商品号 CHAR(10) PRIMARY KEY,
+    商品名 VARCHAR(40),
+    类别 VARCHAR(20),
+    进货单位 INT
+)
+CREATE TABLE 销售表
+(
+    商品号 CHAR(10),
+    销售时间 DATETIME,
+    销售数量 INT,
+    销售单价 INT,
+    PRIMARY KEY(商品号,销售时间)
+)
+下面是一个用户定义的多语句表值函数,它接受类别作为输入参数,返回该类别的下的每种商品在2012年的销售总利润,
+并将结果按照销售总利润的降序输出.请补全该函数定义代码.
+CREATE FUNCTION f_Profit(@lb char(10)) ______@ProfitTable______
+(
+    商品号 CHAR(10),
+    总利润 INT
+)
+    BEGIN
+        INSERT INTO @ProfitTable
+        ______
+        ______
+    END
+
+
+    '------ 解题思路 ------'
+    用户定义的多语句表值函数的命令格式为 : 
+    CREATE FUNCTION [Schema_name.] function name
+    ( 
+        [
+        {@parameter_name} [AS] [type_schema_name.] parameter_data_type
+        [ = default]
+        [,···n]
+        ]
+    )
+    RETURNS @resturn_variable TABLE <table_type_definition>
+    [WITH <function option>[[,]...n]]
+    [AS]
+        BEGIN
+            function_body
+            RETURN
+        END
+    [;]
+    <table_type_definition> :: = 
+    (
+        {<column_definition><column_constraint>|<computed_column_definition>}
+        [<table_constraint>][,···n]
+    )
+
+    采用复合SQL语句的格式,先查询出指定类别的所有商品号 : 'SELECT 商品号 FROM 商品表 WHERE 类别 = @lb'
+    其中'@lb'为函数的传入参数.然后再销售表中使用'GROUP BY'对商品号进行分组.并采用'SUM'计算每个分组的总和.
+
+    '------ 参考答案 ------'
+    CREATE FUNCTION f_Profit(@lb char(10)) 
+    RETURNS @ProfitTable TABLE
+    (
+        商品号 CHAR(10),
+        总利润 INT
+    )
+    BEGIN
+        INSERT INTO @ProfitTable
+        SELECT a.商品号,SUM(销售数量*(销售单价-进货价格)) AS 总利润 FROM 销售表 a JOIN 商品表 b ON a.商品号 = b.商品号
+            WHERE a.商品号 IN (SELECT 商品号 FROM 商品表 WHERE 类别 = @lb)
+                GROUP BY a.商品号 ORDER BY 总利润 DESC
+        RETURN @ProfitTable
+    END
+
+
+
+/*
+ * @Author: HuangYuhui 
+ * @Date: 2019-02-06 16:43:02 
+ * @Last Modified by:   HuangYuhui 
+ * @Last Modified time: 2019-02-06 16:43:02 
+ */
+
+ 3-某教务管理系统使用SQL Server 2008数据库管理系统,数据库软硬件配置信息如下 : 
+ I-数据库运行在两路 Intel Xeon E5-2609 2.4Hz CPU(每路CPU4核心),128内存,2块300GB15000转SAS硬盘(RAID 1)的服务器上;
+ II-服务器操作系统为Windows 2003 32位企业版,安装SP2补丁;
+ III-数据库为SQL Server 2008 Enterprise(32位),数据库中总数据量近130G.
+ 近一个学期来,用户反映系统运行缓慢,经程序员定位,确定为数据库服务器响应缓慢,需要进行调优.
+
+    ------ 解题思路 ------
+    数据库性能优化的基本原理就是通过尽可能少的磁盘访问获得所需要的数据.SQL SERVER性能优化一般从 : 
+    1-数据库设计
+    2-应用程序编码
+    3-硬盘优化
+    4-数据库索引
+    5-SQL语句
+    6-事物处理
+
+    ------ 参考答案 ------
+    根据SQL Server 2008数据库的特性以及题目中的条件,综合给出以下的调优方案.
+    (1)表结构优化 : 重新优化数据库设计结构,规范数据库逻辑设计.设计主键和外键.设计合适大小的字段.
+    (2)硬件优化 : 购买一块同样大小的硬盘,将硬盘做成'RAID5',用以提高数据库读写速度,增加服务器CPU个数,扩大服务器的内存.
+    (3)索引优化 : 采用对经常作为条件查询的列设计索引,在查询中经常用到的列上建立'非聚簇索引'.在频繁进行范围查询,排序,分组的列上
+                 建立聚簇索引,对于频繁进行删除,插入,操作的表不要建立过多的索引.
+    (4)采用视图 : 合理使用视图和分区视图,在需要更新和删除操作不多,查询操作频繁的表上建立索引视图.
+    (5)SQL语句优化 : 选择运算应尽可能先做,并在对用一个表进行多个选择运算时,选择影响较大的语句放在前面,较弱的选择条件放在后面,这
+                    样就可以先根据较严格的条件得出数据较少的信息,再把这些信息中根据后面较弱的条件得到满足条件的信息.应避免使用
+                    相关子查询,把子查询转换成'联结'来实现.字段提取按照'需多少,提多少'的原则.避免'SELECT *',因为其将会返回数据
+                    库相应表的所有列信息,这对于一个列较多的表无疑是一项费时的操作,采用存储过程以降低高数据处理速度.
+
+
+
+
+
+    
+
